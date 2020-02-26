@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style type="text/css">
+        .hide{
+            display: none;
+        }
+        .modal{
+            height: 500px;
+            width: 400px;
+            position: fixed;
+            left: 50%;
+            top: 50%;
+            margin-left: -200px;
+            margin-top: -250px;
+            background-color: deepskyblue;
+        }
+        .hidden{
+            background-color: black;
+            opacity: 0.6;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    </style>
+
+</head>
+<body>
+    <!-- 遮罩层 -->
+    <div class="hidden hide"></div>
+    <!-- 添加的模态对话框 -->
+    <div class="hide modal">
+        <form method="post" action="/add/" id="add_host">
+{#            <input type="text" placeholder="请输入主机IP" name="ip"/>#}
+{#            <input type="text" placeholder="请输入主机名" name="hostname"/>#}
+{#            <input type="text" placeholder="请输入主机端口" name="port"/>#}
+{#            <select multiple="multiple" name="business" >#}
+{#                <option>WEB服务器</option>#}
+{#                <option>DB服务器</option>#}
+{#                <option>cache服务器</option>#}
+{#            </select>#}
+            {{ obj.as_p }}
+            <input type="submit" value="提交"/>
+            <a id="aj">使用ajax方式提交</a>
+        </form>
+    </div>
+    <input type="button" value="添加" id="add"/><br>
+    <!-- 这里user是related_name -->
+    {% for machine in user.user.all %}
+        <table>
+            <tr>
+                <td>{{ machine.ip }}</td>
+                <td><a href="/del-{{ machine.nid }}">删除</a>|</td>
+            </tr>
+        </table>
+    {% endfor %}
+    <script src="/static/jquery-3.4.1.min.js"></script>
+    <script>
+        $('#add').click(function () {
+            $('.modal, .hide').removeClass('hide');
+        });
+        {#$.ajax({#}
+        {#    url: '/add/',#}
+        {#    data: $('#add_host').serialize(),#}
+        {#    type: 'POST',#}
+        {#    success:function (obj) {#}
+        {#        location.reload();#}
+        {#    }#}
+    </script>
+</body>
+</html>
