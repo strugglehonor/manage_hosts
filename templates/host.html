@@ -3,6 +3,8 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
+    <link rel="stylesheet" href="/static/bootstrap-3.3/css/bootstrap-theme.css"/>
+    <link rel="stylesheet" href="/static/bootstrap-3.3/css/bootstrap.css"/>
     <style type="text/css">
         .hide{
             display: none;
@@ -35,14 +37,6 @@
     <!-- 添加的模态对话框 -->
     <div class="hide modal">
         <form method="post" action="/add/" id="add_host">
-{#            <input type="text" placeholder="请输入主机IP" name="ip"/>#}
-{#            <input type="text" placeholder="请输入主机名" name="hostname"/>#}
-{#            <input type="text" placeholder="请输入主机端口" name="port"/>#}
-{#            <select multiple="multiple" name="business" >#}
-{#                <option>WEB服务器</option>#}
-{#                <option>DB服务器</option>#}
-{#                <option>cache服务器</option>#}
-{#            </select>#}
             <p>{{ obj.ip }}</p>
             <p>{{ obj.hostname }}</p>
             <p>{{ obj.port }}</p>
@@ -62,14 +56,61 @@
     </div>
     <input type="button" value="添加" id="add"/><br>
     <!-- 这里user是related_name -->
-    {% for machine in user.user.all %}
-        <table>
+{#    {% for machine in user.user.all %}#}
+{#        <table>#}
+{#            <tr>#}
+{#                <td>{{ machine.ip }}</td>#}
+{#                <td><a href="/del-{{ machine.nid }}">删除</a>|</td>#}
+{#            </tr>#}
+{#        </table>#}
+{#    {% endfor %}#}
+    <!-- 使用分页器分页显示主机 -->
+    {% for machine in page %}
+        <table border="1">
             <tr>
                 <td>{{ machine.ip }}</td>
                 <td><a href="/del-{{ machine.nid }}">删除</a>|</td>
             </tr>
         </table>
     {% endfor %}
+    <!-- 开始写分页功能 -->
+    <nav aria-label="Page navigation">
+  <ul class="pagination">
+  {% if page.has_previous %}
+    <li>
+      <a href="?page={{ page.previous_page_number }}" aria-label="Previous">
+        <span aria-hidden="true">上一页</span>
+      </a>
+    </li>
+  {% else %}
+      <li><a href="#" aria-label="Previous" class="disabled">
+        <span aria-hidden="true">上一页</span></a>
+      </li>
+  {% endif %}
+      <!-- 设置当前页对应的分页的图标显示为深色 -->
+  {% for item in page_range %}
+      {% if item == current_page %}
+        <li class="active"><a href="/host/?page={{ item }}">{{ item }}</a></li>
+      {% else %}
+        <li><a href="?page={{ item }}">{{ item }}</a></li>
+      {% endif %}
+  {% endfor %}
+  {% if page.has_next %}
+    <li>
+      <a href="?page={{ page.next_page_number }}" aria-label="Next">
+        <span aria-hidden="true">下一页</span>
+      </a>
+    </li>
+  {% else %}
+      <li>
+      <a href="#" aria-label="Next" class="disabled">
+        <span aria-hidden="true">下一页</span>
+      </a>
+    </li>
+  {% endif %}
+
+  </ul>
+</nav>
     <script src="/static/jquery-3.4.1.min.js"></script>
     <script>
         $('#add').click(function () {

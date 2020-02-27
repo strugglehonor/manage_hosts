@@ -2,6 +2,7 @@ from django.shortcuts import render,redirect,reverse,HttpResponse
 from django.views import View
 from . import form, models
 from django.utils.decorators import method_decorator
+from django.core.paginator import Paginator, EmptyPage
 # Create your views here.
 
 
@@ -55,19 +56,12 @@ class Register(View):
             error = '用户名或者密码错误'
             return render(request, 'register.html', {'error': error})
 
-#
-# @method_decorator(auth, name="dispatch")    # 如果没有登录就回到登录页面
-# class Host(View):
-#     def get(self, request, *args, **kwargs):
-#         print('1')
-#         username = request.session.get('user')
-#         user = models.User.objects.filter(username=username).first()
-#         obj = form.FM()
-#         return render(request, 'host.html', {"user": user, 'obj': obj})
+
 @auth
 def host(request):
     username = request.session.get('user')
     user = models.User.objects.filter(username=username).first()
+    ############ 未实现分页效果，开始批量创建主机，并且批量绑定多对多关系
     # # 批量插入数据
     # business = models.Business.objects.get(id=1)
     # hosts_list = []
@@ -77,9 +71,35 @@ def host(request):
     #         user=user,
     #         hostname='DB%s'%(str(i-99)),
     #         b=business,
+    #         port=80,
     #     )
+    #     # host.application.add(3)  # 这句代码可能错，因为host没有创建
     #     hosts_list.append(host)
+    # print(hosts_list)
     # models.Host.objects.bulk_create(hosts_list)
+    # # 批量绑定多对多关系
+    # host_list = models.Host.objects.all()
+    # for host in host_list:
+    #     host.application.add(3)
+    host_list = models.Host.objects.filter(user_id=user.id)
+    # 设置每页显示10条数据
+    paginator = Paginator(host_list, 10)
+    # 从前端获取current_page
+    try:
+        current_page = int(request.GET.get('page', 1))
+        page = paginator.page(current_page)
+        if paginator.num_pages > 10:
+            # 设置页面的分页块超过10个
+            if current_page - 5 < 1:
+                page_range = range(1, 11)
+            elif current_page +5 > paginator.num_pages:
+                page_range = range(paginator.num_pages-10, paginator.num_pages+1)
+            else:
+                page_range = range(current_page-5, current_page+5)
+        else:
+            page_range = paginator.page_range
+    except EmptyPage:
+        current_page = 1
     obj = form.Host
     application_list = models.Application.objects.all()
     business_list = models.Business.objects.all()
