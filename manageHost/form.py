@@ -35,10 +35,17 @@ class Host(forms.Form):
         error_messages={'required': '端口号必填'},
         widget=widgets.TextInput(attrs={'placeholder': '请输入端口号'})
     )
-    business = fields.MultipleChoiceField(
-        choices=((1,'WEB服务器'), (2, 'DB服务器'), (3, 'cache服务器'),),
+    business = fields.ChoiceField(
+        choices=((1,'运维部'), (2, '开发部'), ),
         initial=[1,],
         required=True,
         error_messages={'required':'业务线是必选的'},
+        widget=widgets.Select
+    )
+    application = fields.MultipleChoiceField(
+        choices=((1,'web服务器'), (2,'DB服务器'), (3,'cache服务器')),
+        required=True,
+        initial=[1,],
+        error_messages={'require': '服务器的应用是必选的'},
         widget=widgets.SelectMultiple
     )

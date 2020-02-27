@@ -68,6 +68,11 @@ class Register(View):
 def host(request):
     username = request.session.get('user')
     user = models.User.objects.filter(username=username).first()
+    # # 批量插入数据
+    # business = models.Business.objects.create(b_name='DB')
+    # hosts_list = []
+    # for i in range(100, 201):
+    #     host = models.Host()
     obj = form.Host
     return render(request, 'host.html', {"user": user, 'obj': obj})
 
@@ -84,9 +89,13 @@ class addHost(View):
         ip =request.POST.get('ip')
         port = request.POST.get('port')
         business = request.POST.get('business')
-        business = models.Business.objects.create(b_name=business)
+        # 使用get_or_create就可以不用重复创建了，因为business就只有运维部和开发部
+        business, is_get = models.Business.objects.get_or_create(b_name=business)
+        application_name = request.POST.getlist('application')
         user = request.session.get('user')
         user = models.User.objects.filter(username=user).first()
         host = models.Host.objects.create(hostname=hostname, ip=ip, port=port, b=business, user=user)
+        # 使用related_name字段来绑定多对多关系
+        host.application.add(*application_name)
         return redirect('/host/')
 

@@ -22,6 +22,7 @@ class Host(models.Model):
     hostname = models.CharField(max_length=20)
     user = models.ForeignKey('User', on_delete=models.CASCADE, related_name='user')
     b = models.ForeignKey('Business', on_delete=models.CASCADE, related_name='b')
+    # host = models.ManyToManyField('Host')
 
     class Meta:
         verbose_name = '主机信息'
@@ -32,7 +33,7 @@ class Host(models.Model):
 
 
 class Application(models.Model):
-    host = models.ManyToManyField('Host')
+    host = models.ManyToManyField('Host', related_name='application')
     name = models.CharField(max_length=20)
 
     class Meta:
