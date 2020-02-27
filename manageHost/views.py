@@ -69,12 +69,21 @@ def host(request):
     username = request.session.get('user')
     user = models.User.objects.filter(username=username).first()
     # # 批量插入数据
-    # business = models.Business.objects.create(b_name='DB')
+    # business = models.Business.objects.get(id=1)
     # hosts_list = []
     # for i in range(100, 201):
-    #     host = models.Host()
+    #     host = models.Host(
+    #         ip='10.10.10.%s'%(str(i)),
+    #         user=user,
+    #         hostname='DB%s'%(str(i-99)),
+    #         b=business,
+    #     )
+    #     hosts_list.append(host)
+    # models.Host.objects.bulk_create(hosts_list)
     obj = form.Host
-    return render(request, 'host.html', {"user": user, 'obj': obj})
+    application_list = models.Application.objects.all()
+    business_list = models.Business.objects.all()
+    return render(request, 'host.html', locals())
 
 def delHost(request, nid):
     models.Host.objects.filter(nid=nid).delete()
@@ -88,14 +97,14 @@ class addHost(View):
         hostname = request.POST.get('hostname')
         ip =request.POST.get('ip')
         port = request.POST.get('port')
-        business = request.POST.get('business')
+        b_id = request.POST.get('business')
         # 使用get_or_create就可以不用重复创建了，因为business就只有运维部和开发部
-        business, is_get = models.Business.objects.get_or_create(b_name=business)
-        application_name = request.POST.getlist('application')
+        business, is_get = models.Business.objects.get_or_create(id=b_id) # 这里有问题
+        application = request.POST.getlist('application')
         user = request.session.get('user')
         user = models.User.objects.filter(username=user).first()
         host = models.Host.objects.create(hostname=hostname, ip=ip, port=port, b=business, user=user)
         # 使用related_name字段来绑定多对多关系
-        host.application.add(*application_name)
+        host.application.add(*application)
         return redirect('/host/')
 
