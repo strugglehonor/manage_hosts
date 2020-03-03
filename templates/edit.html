@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+    <form method="post" action="/edit-{{ machine.nid }}/">
+        <input type="text" value="{{ machine.ip }}" name="ip"/>
+        <input type="text" value="{{ machine.port }}" name="port"/>
+        <input type="text" value="{{ machine.hostname }}" name="hostname"/>
+        <select multiple="multiple" name="application" >
+            {% for application in application_list %}
+                <option value="{{ application.id }}">{{ application.name }}</option>
+            {% endfor %}
+        </select>
+        <select name="business">
+            {% for business in business_list %}
+                <option value="{{ business.id }}">{{ business.b_name }}</option>
+            {% endfor %}
+        </select>
+        <input type="submit" value="提交">
+    </form>
+</body>
+</html>

@@ -105,15 +105,12 @@ def host(request):
     business_list = models.Business.objects.all()
     return render(request, 'host.html', locals())
 
-def delHost(request, nid):
-    models.Host.objects.filter(nid=nid).delete()
-    return redirect('/host/')
 
 method_decorator(auth, name='dispatch')
 class addHost(View):
     def get(self, request):
         return redirect('/host/')
-    def post(self, request):
+    def post(self, request, *args, **kwargs):
         hostname = request.POST.get('hostname')
         ip =request.POST.get('ip')
         port = request.POST.get('port')
@@ -128,3 +125,42 @@ class addHost(View):
         host.application.add(*application)
         return redirect('/host/')
 
+
+class EditHost(View):
+    def get(self, request, nid):
+        machine = models.Host.objects.filter(nid=nid).first()
+        application_list = models.Application.objects.all()
+        business_list = models.Business.objects.all()
+        return render(request, 'edit.html', locals())
+
+    def post(self, request, nid):
+        ip = request.POST.get('ip')
+        port = request.POST.get('port')
+        b_id = request.POST.get('business')
+        hostname = request.POST.get('hostname')
+        app_id = request.POST.getlist('application')
+        """
+        注意，这里不能用get筛选数据库记录，因为updateupdate是QuerySet对象的方法，get返回的是一个model对象
+        """
+        machine = models.Host.objects.filter(nid=nid).update(
+            ip=ip,
+            port=port,
+            hostname=hostname,
+            b_id = b_id,
+        )
+        print(machine)
+        machine = models.Host.objects.filter(nid=nid).first()
+        machine.application.set(app_id)
+        return redirect('/host/')
+
+
+def detail(request, nid):
+    print(type(nid))
+    machine = models.Host.objects.filter(nid=nid).first()
+    print(machine)
+    return render(request, 'detail.html', locals())
+
+
+def delHost(request, nid):
+    models.Host.objects.filter(nid=nid).delete()
+    return redirect('/host/')

@@ -9,7 +9,7 @@
         .hide{
             display: none;
         }
-        .modal{
+        #modal{
             height: 500px;
             width: 400px;
             position: fixed;
@@ -19,7 +19,7 @@
             margin-top: -250px;
             background-color: deepskyblue;
         }
-        .hidden{
+        #hidden{
             background-color: black;
             opacity: 0.6;
             position: fixed;
@@ -33,9 +33,9 @@
 </head>
 <body>
     <!-- 遮罩层 -->
-    <div class="hidden hide"></div>
+    <div class="hide" id="hidden"></div>
     <!-- 添加的模态对话框 -->
-    <div class="hide modal">
+    <div class="hide" id="modal">
         <form method="post" action="/add/" id="add_host">
             <p>{{ obj.ip }}</p>
             <p>{{ obj.hostname }}</p>
@@ -50,26 +50,18 @@
                     <option value="{{ business.id }}">{{ business.b_name }}</option>
                 {% endfor %}
             </select>
+            <input type="button" id="cancel" value="取消"/>
             <input type="submit" value="提交"/>
             <a id="aj">使用ajax方式提交</a>
         </form>
     </div>
     <input type="button" value="添加" id="add"/><br>
-    <!-- 这里user是related_name -->
-{#    {% for machine in user.user.all %}#}
-{#        <table>#}
-{#            <tr>#}
-{#                <td>{{ machine.ip }}</td>#}
-{#                <td><a href="/del-{{ machine.nid }}">删除</a>|</td>#}
-{#            </tr>#}
-{#        </table>#}
-{#    {% endfor %}#}
     <!-- 使用分页器分页显示主机 -->
     {% for machine in page %}
         <table border="1">
             <tr>
                 <td>{{ machine.ip }}</td>
-                <td><a href="/del-{{ machine.nid }}">删除</a>|</td>
+                <td><a href="/del-{{ machine.nid }}">删除</a>|<a href="/detail-{{ machine.nid }}">查看详细</a></td>
             </tr>
         </table>
     {% endfor %}
@@ -114,7 +106,10 @@
     <script src="/static/jquery-3.4.1.min.js"></script>
     <script>
         $('#add').click(function () {
-            $('.modal, .hide').removeClass('hide');
+            $('#modal, #hide').removeClass('hide');
+        });
+        $('#cancel').click(function () {
+            $('#modal, #hide').addClass('hide');
         });
         {#$.ajax({#}
         {#    url: '/add/',#}

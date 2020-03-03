@@ -1,4 +1,5 @@
 # Byte-compiled / optimized / DLL files
+#
 __pycache__/
 *.py[cod]
 *$py.class
@@ -133,3 +134,5 @@ dmypy.json
 
 # pytype static type analyzer
 .pytype/
+# 忽略IDE的文件
+.idea/workspace.xml

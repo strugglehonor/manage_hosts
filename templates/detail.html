@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>detail</title>
+</head>
+<body>
+    <table border="1">
+        <tr>
+            <td>{{ forloop.counter }}</td>
+            <td>{{ machine.ip }}</td>
+            <td>{{ machine.port }}</td>
+            <td>{{ machine.hostname }}</td>
+            <td>{{ machine.b.b_name }}</td>
+            <td>
+                {% for app in machine.application.all %}
+                    {{ app.name }}
+                {% endfor %}
+            </td>
+            <td><a href="/edit-{{ machine.nid }}">编辑</a> </td>
+        </tr>
+    </table>
+</body>
+</html>
