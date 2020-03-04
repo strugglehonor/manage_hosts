@@ -11,7 +11,6 @@ def auth(func):
         is_login = request.session.get('is_login')
         if not is_login:
             return redirect('/login/')
-        print('auth is called')
         return func(request, *args, **kwargs)
     return wrapper
 
@@ -61,26 +60,28 @@ class Register(View):
 def host(request):
     username = request.session.get('user')
     user = models.User.objects.filter(username=username).first()
-    ############ 未实现分页效果，开始批量创建主机，并且批量绑定多对多关系
-    # # 批量插入数据
-    # business = models.Business.objects.get(id=1)
-    # hosts_list = []
-    # for i in range(100, 201):
-    #     host = models.Host(
-    #         ip='10.10.10.%s'%(str(i)),
-    #         user=user,
-    #         hostname='DB%s'%(str(i-99)),
-    #         b=business,
-    #         port=80,
-    #     )
-    #     # host.application.add(3)  # 这句代码可能错，因为host没有创建
-    #     hosts_list.append(host)
-    # print(hosts_list)
-    # models.Host.objects.bulk_create(hosts_list)
-    # # 批量绑定多对多关系
-    # host_list = models.Host.objects.all()
-    # for host in host_list:
-    #     host.application.add(3)
+    """
+    实现分页效果，开始批量创建主机，并且批量绑定多对多关系
+    批量插入数据
+    business = models.Business.objects.get(id=1)
+    hosts_list = []
+    for i in range(100, 201):
+        host = models.Host(
+            ip='10.10.10.%s'%(str(i)),
+            user=user,
+            hostname='DB%s'%(str(i-99)),
+            b=business,
+            port=80,
+        )
+        # host.application.add(3)  # 这句代码可能错，因为host没有创建
+        hosts_list.append(host)
+    print(hosts_list)
+    models.Host.objects.bulk_create(hosts_list)
+    # 批量绑定多对多关系
+    host_list = models.Host.objects.all()
+    for host in host_list:
+        host.application.add(3)
+    """
     host_list = models.Host.objects.filter(user_id=user.id)
     # 设置每页显示10条数据
     paginator = Paginator(host_list, 10)
@@ -140,18 +141,21 @@ class EditHost(View):
         hostname = request.POST.get('hostname')
         app_id = request.POST.getlist('application')
         """
-        注意，这里不能用get筛选数据库记录，因为updateupdate是QuerySet对象的方法，get返回的是一个model对象
+        注意，这里不能用get筛选数据库记录，因为update是QuerySet对象的方法，get返回的是一个model对象
         """
-        machine = models.Host.objects.filter(nid=nid).update(
-            ip=ip,
-            port=port,
-            hostname=hostname,
-            b_id = b_id,
-        )
-        print(machine)
-        machine = models.Host.objects.filter(nid=nid).first()
-        machine.application.set(app_id)
-        return redirect('/host/')
+        try:
+            machine = models.Host.objects.filter(nid=nid).update(
+                ip=ip,
+                port=port,
+                hostname=hostname,
+                b_id = b_id,
+            )
+            print(machine)
+            machine = models.Host.objects.filter(nid=nid).first()
+            machine.application.set(app_id)
+            return HttpResponse('OK')
+        except Exception:
+            return HttpResponse('请主机各项信息是否填写完成')
 
 
 def detail(request, nid):

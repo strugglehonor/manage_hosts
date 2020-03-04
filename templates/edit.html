@@ -5,7 +5,7 @@
     <title>Title</title>
 </head>
 <body>
-    <form method="post" action="/edit-{{ machine.nid }}/">
+    <form method="post" action="/edit-{{ machine.nid }}/" id="edit">
         <input type="text" value="{{ machine.ip }}" name="ip"/>
         <input type="text" value="{{ machine.port }}" name="port"/>
         <input type="text" value="{{ machine.hostname }}" name="hostname"/>
@@ -19,7 +19,30 @@
                 <option value="{{ business.id }}">{{ business.b_name }}</option>
             {% endfor %}
         </select>
-        <input type="submit" value="提交">
+        <!-- 改为了使用ajax提交 -->
+{#        <input type="submit" value="提交"/>#}
+        <input type="button" value="使用ajax方式提交" id="ajax"/>
     </form>
+    <script src="/static/jquery-3.4.1.min.js"></script>
+    <script>
+        $('#ajax').click(function () {
+            $.ajax({
+                url: "/edit-{{ machine.nid }}/",
+                type: "POST",
+                data: $('#edit').serialize(),
+                success: function (data) {
+                    //如果返回OK,跳转到host页面，弹窗显示信息修改成功,
+                    // 否则弹窗提示错误消息
+                    if (data == 'OK'){
+                        location.href='/host/';
+                        alert('主机信息修改成功');
+                    }
+                    else {
+                        alert(data);
+                    }
+                }
+        })
+        })
+    </script>
 </body>
 </html>

@@ -46,3 +46,10 @@ class Application(models.Model):
 
 class Business(models.Model):
     b_name = models.CharField(max_length=20)
+
+    class Mete:
+        verbose_name = '主机所属业务线'
+        verbose_name_plural = verbose_name
+
+    def __str__(self):
+        return self.b_name
