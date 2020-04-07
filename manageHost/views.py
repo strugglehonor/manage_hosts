@@ -7,6 +7,11 @@ from django.core.paginator import Paginator, EmptyPage
 
 
 def auth(func):
+    """
+    验证登录的装饰器
+    :param func:
+    :return:
+    """
     def wrapper(request, *args, **kwargs):
         is_login = request.session.get('is_login')
         if not is_login:
@@ -16,6 +21,9 @@ def auth(func):
 
 
 class Login(View):
+    """
+    登录方法
+    """
     def get(self, request):
         obj = form.FM()
         return render(request, 'login.html', {"obj":obj})
@@ -43,6 +51,9 @@ class Login(View):
 
 
 class Register(View):
+    """
+    注册用户
+    """
     def get(self, request):
         obj = form.FM()
         return render(request, 'register.html', {'obj': obj})
@@ -58,6 +69,11 @@ class Register(View):
 
 @auth
 def host(request):
+    """
+    显示主机
+    :param request:
+    :return:
+    """
     username = request.session.get('user')
     user = models.User.objects.filter(username=username).first()
     """
@@ -109,6 +125,9 @@ def host(request):
 
 method_decorator(auth, name='dispatch')
 class addHost(View):
+    """
+    添加主机
+    """
     def get(self, request):
         return redirect('/host/')
     def post(self, request, *args, **kwargs):
@@ -128,6 +147,9 @@ class addHost(View):
 
 
 class EditHost(View):
+    """
+    编辑主机信息
+    """
     def get(self, request, nid):
         machine = models.Host.objects.filter(nid=nid).first()
         application_list = models.Application.objects.all()
@@ -159,6 +181,12 @@ class EditHost(View):
 
 
 def detail(request, nid):
+    """
+    查看主机详细的细节
+    :param request:
+    :param nid:
+    :return:
+    """
     print(type(nid))
     machine = models.Host.objects.filter(nid=nid).first()
     print(machine)
@@ -166,5 +194,11 @@ def detail(request, nid):
 
 
 def delHost(request, nid):
+    """
+    删除主机方法
+    :param request:
+    :param nid:
+    :return:
+    """
     models.Host.objects.filter(nid=nid).delete()
     return redirect('/host/')
