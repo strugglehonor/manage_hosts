@@ -6,30 +6,50 @@
     <link rel="stylesheet" href="/static/bootstrap-3.3/css/login.css">
 </head>
 <body>
+{#<div class="box">#}
+{#    <h2>Login</h2>#}
+{#    <form action="/login/" method="post">#}
+{#        {% csrf_token %}#}
+{#        <div class="inputbox">#}
+{#            <input type="text" name="username" required="required">#}
+{#            <label>Username</label>#}
+{#        </div>#}
+{#        <div class="inputbox">#}
+{#            required  必填字段#}
+{#            <input type="password" name="password" required="required">#}
+{#            <label>Password</label>#}
+{#        </div>#}
+{#        <input type="submit" name="" value="submit">#}
+{#    </form>#}
+{#    {{ error }}#}
+{#</div>#}
+
 <div class="box">
-    <h2>Login</h2>
+        <h2>Login</h2>
     <form action="/login/" method="post">
         {% csrf_token %}
         <div class="inputbox">
-            <input type="text" name="username" required="required">
-            <label>Username</label>
+            <p>{{ obj.username }}</p>
+{#            <label>Username</label>#}
         </div>
         <div class="inputbox">
-{#            required  必填字段#}
-            <input type="password" name="password" required="required">
-            <label>Password</label>
+            <p>{{ obj.passwd }}</p>
+{#            <label>Password</label>#}
         </div>
-        <input type="submit" name="" value="submit">
+        <input type="submit" value="submit">
     </form>
     {{ error }}
-</div>
-{#    <h3 style="color: #2aabd2">登录页面</h3>#}
+
+
+{#<div class="box">#}
+{#        <h2>Login</h2>#}
 {#    <form action="/login/" method="post">#}
 {#        {% csrf_token %}#}
 {#        <p>{{ obj.username }}</p>#}
 {#        <p>{{ obj.passwd }}</p>#}
-{#        <input type="submit" value="提交">#}
+{#        <input type="submit" value="submit">#}
 {#    </form>#}
 {#    {{ error }}#}
+</div>
 </body>
 </html>
