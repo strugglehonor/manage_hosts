@@ -29,7 +29,11 @@ class Login(View):
         return render(request, 'login.html', {"obj":obj})
 
     def post(self, request):
+        print(request.POST)
+        print(request.GET)
+        print(request.FILES)
         obj = form.FM(request.POST)
+        print(obj)
         if obj.is_valid():
         # 如果用户名，密码格式正确，开始验证
             print(obj.cleaned_data)
@@ -48,6 +52,39 @@ class Login(View):
         else:
             error = '用户名或者密码格式错误'
             return render(request, 'login.html', {'obj': obj, 'error':error})
+
+# class Login(View):
+#     """
+#     登录方法
+#     """
+#     def get(self, request):
+#         obj = form.FM()
+#         return render(request, 'login.html', {"obj":obj})
+#
+#     def post(self, request):
+#         print(request.POST)
+#         print(request.GET)
+#         print(request.FILES)
+#         obj = form.FM(request.POST)
+#         print(obj)
+#         if obj.is_valid():
+#         # 如果用户名，密码格式正确，开始验证
+#             print(obj.cleaned_data)
+#             user = models.User.objects.filter(**obj.cleaned_data).first()
+#             if user:
+#                 # 用户名密码输入正确
+#                 print(user.username)
+#                 # 设置session
+#                 request.session['is_login'] = True
+#                 request.session['user'] =  user.username
+#                 return redirect('/host/')
+#             else:
+#                 # 验证失败，就给增加一个错
+#                 error = '用户名或者密码错误'
+#                 return render(request, 'login.html', {'error': error, 'obj': obj})
+#         else:
+#             error = '用户名或者密码格式错误'
+#             return render(request, 'login.html', {'obj': obj, 'error':error})
 
 
 class Register(View):
