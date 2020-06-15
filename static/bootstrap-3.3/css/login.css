@@ -1,0 +1,90 @@
+/*https://www.cnblogs.com/nyw1983/p/11406387.html*/
+body{
+    margin:0px;
+    padding:0px;
+    font-family:sans-serif;
+    /*设置字体为sans-serif*/
+    background: url(/static/images/dahai.jpg);
+    background-size:cover;
+    /*背景图片尺寸为覆盖cover*/
+}
+.box{
+    position:absolute;
+    /*定位方式绝对定位absolute*/
+    top:50%;
+    left:50%;
+    /*顶和高同时设置50%实现的是同时水平垂直居中效果*/
+    transform:translate(-50%,-50%);
+    /*实现块元素百分比下居中*/
+    width:450px;
+    padding:50px;
+    background: rgba(0,0,0,.8);
+    /*背景颜色为黑色，透明度为0.8*/
+    box-sizing:border-box;
+    /*box-sizing设置盒子模型的解析模式为怪异盒模型，
+    将border和padding划归到width范围内*/
+    box-shadow: 0px 15px 25px rgba(0,0,0,.5);
+    /*边框阴影  水平阴影0 垂直阴影15px 模糊25px 颜色黑色透明度0.5*/
+    border-radius:15px;
+    /*边框圆角，四个角均为15px*/
+}
+.box h2{
+    margin:0 0 30px;
+    padding:0;
+    color: #fff;
+    text-align:center;
+    /*文字居中*/
+}
+.box .inputbox{
+    position:relative;
+}
+.box .inputbox input{
+    width: 100%;
+    padding:10px 0;
+    font-size:16px;
+    color:#fff;
+    letter-spacing: 1px;
+    /*字符间的间距1px*/
+    margin-bottom: 30px;
+    border:none;
+    border-bottom: 1px solid #fff;
+    outline:none;
+    /*outline用于绘制元素周围的线
+    outline：none在这里用途是将输入框的边框的线条使其消失*/
+    background: transparent;
+    /*背景颜色为透明*/
+}
+/*.box .inputbox label{*/
+/*    !*<label> 标签为 input 元素定义标注（标记）*!*/
+/*    position:absolute;*/
+/*    top:0px;*/
+/*    left:0px;*/
+/*    padding:10px 0;*/
+/*    font-size: 16px;*/
+/*    color:#fff;*/
+/*    pointer-events:none;*/
+/*    !*鼠标事件消失，比如说选中文字，光标定位，超链接下划线*!*/
+/*    transition:.5s;*/
+/*    !*过渡时间5s*!*/
+/*}*/
+/*.box .inputbox input:focus ~ label,*/
+/*.box .inputbox input:valid ~ label*/
+/*{*/
+/*    top:-18px;*/
+/*    left:0;*/
+/*    color:#03a9f4;*/
+/*    font-size:14px;*/
+/*}*/
+.box input[type="submit"]
+{
+    background: transparent;
+    border:none;
+    outline:none;
+    font-size: 16px;
+    color:#fff;
+    background: #03a9f4;
+    padding:15px 20px;
+    cursor: pointer;
+    /*光标呈现为指示链接的指针（一只手）*/
+    border-radius:10px;
+}
